@@ -52,11 +52,20 @@ class LogStash::Inputs::Reqsample < LogStash::Inputs::Base
   end # def register
 
   def run(queue)
-    @generator.produce(@production_options).each do |log|
-      break if stop?
-      event = LogStash::Event.new('message' => log, 'host' => @host)
-      decorate(event)
-      queue << event
-    end # loop
+    if @stream
+      @generator.produce(@production_options) do |log|
+        break if stop?
+        event = LogStash::Event.new('message' => log, 'host' => @host)
+        decorate(event)
+        queue << event
+      end # produce
+    else
+      @generator.produce(@production_options).each do |log|
+        break if stop?
+        event = LogStash::Event.new('message' => log, 'host' => @host)
+        decorate(event)
+        queue << event
+      end # produce
+    end # if @stream
   end # def run
 end # class LogStash::Inputs::Reqsample
