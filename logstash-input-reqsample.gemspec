@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'logstash-input-reqsample'
-  s.version       = '0.1.1'
+  s.version       = '0.1.2'
   s.licenses      = ['Apache License (2.0)']
   s.summary       = 'Generate randomized log events.'
   s.description   = 'Generate randomized log events.'
