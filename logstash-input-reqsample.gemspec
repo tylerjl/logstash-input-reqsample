@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'logstash-input-reqsample'
-  s.version       = '0.1.0'
+  s.version       = '0.1.1'
   s.licenses      = ['Apache License (2.0)']
   s.summary       = 'Generate randomized log events.'
   s.description   = 'Generate randomized log events.'
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'chronic', '~> 0.10.2'
   s.add_runtime_dependency 'logstash-core-plugin-api', '~> 2.0'
   s.add_runtime_dependency 'logstash-codec-plain'
-  s.add_runtime_dependency 'reqsample', '~> 0.0.2'
+  s.add_runtime_dependency 'reqsample', '~> 0.0.3'
   s.add_runtime_dependency 'stud', '>= 0.0.22'
   s.add_development_dependency 'logstash-devutils'
 end

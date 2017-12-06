@@ -32,7 +32,7 @@ class LogStash::Inputs::Reqsample < LogStash::Inputs::Base
   config :stdev, :validate => :number, :default => 4
 
   # Whether the logs should be streamed gradually instead or returned all at
-  # once.
+  # once (simulates periodic life traffic flow).
   config :stream, :validate => :boolean, :default => false
 
   # Cutoff (in hours) that logs should remain generated within.
@@ -46,26 +46,18 @@ class LogStash::Inputs::Reqsample < LogStash::Inputs::Base
     @production_options = {
       :count => @count,
       :format => @format,
+      :sleep => @stream,
       :truncate => @truncate,
       :peak => Chronic.parse(@peak)
     }
   end # def register
 
   def run(queue)
-    if @stream
-      @generator.produce(@production_options) do |log|
-        break if stop?
-        event = LogStash::Event.new('message' => log, 'host' => @host)
-        decorate(event)
-        queue << event
-      end # produce
-    else
-      @generator.produce(@production_options).each do |log|
-        break if stop?
-        event = LogStash::Event.new('message' => log, 'host' => @host)
-        decorate(event)
-        queue << event
-      end # produce
-    end # if @stream
+    @generator.produce(@production_options).lazy do |log|
+      break if stop?
+      event = LogStash::Event.new('message' => log, 'host' => @host)
+      decorate(event)
+      queue << event
+    end # produce
   end # def run
 end # class LogStash::Inputs::Reqsample
