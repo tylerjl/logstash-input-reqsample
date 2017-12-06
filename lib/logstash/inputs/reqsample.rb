@@ -53,7 +53,7 @@ class LogStash::Inputs::Reqsample < LogStash::Inputs::Base
   end # def register
 
   def run(queue)
-    @generator.produce(@production_options).lazy do |log|
+    @generator.produce(@production_options).lazy.each do |log|
       break if stop?
       event = LogStash::Event.new('message' => log, 'host' => @host)
       decorate(event)
